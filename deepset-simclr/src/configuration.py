@@ -14,7 +14,7 @@ class General:
 @dataclass
 class Data:
     dataset: str = 'oct'
-    dataset_root: str = r"/content/drive/MyDrive/AMD"
+    dataset_root: str = r"/content/drive/Shared with me/AMD"
     train_aug: str = 'simclr'
     val_aug: str = 'simclr'
     image_size: int = 512
