@@ -30,7 +30,7 @@ class OCTDataset(Dataset):
                 curr_im = images[:, ini:fin, i]
                 
                 # Convert numpy array to PIL Image
-                image = Image.fromarray(curr_im.astype(np.uint8))
+                image = Image.fromarray(curr_im.astype(np.uint8)).convert('RGB')
                 
                 self.images.append(image)
 
