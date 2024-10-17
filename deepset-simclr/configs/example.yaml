@@ -4,7 +4,7 @@ general:
   checkpoint_freq: 10
 data:
   dataset: dummy
-  dataset_type: None
+  dataset_type: per-scan
   image_size: 512
   set_size: 3
   sample_width: 0.5
