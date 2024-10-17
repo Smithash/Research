@@ -22,6 +22,8 @@ def get_loaders(config: Config):
     
     if dataset == 'dummy':
         train_dataset, val_dataset = get_oct_dataset(config, train_transform, val_transform)
+    else:
+        raise NotImplementedError(f'Dataset {dataset} not supported')
 
     train_loader = DataLoader(
         train_dataset, batch_size=config.optim.batch_size, drop_last=True,
