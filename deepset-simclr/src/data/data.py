@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 from src.configuration import Config
 from src.data.augmentations import get_transform
 from src.data.dummy_dataset import get_dummy_dataset
-from src.data.OCTDataset import get_oct_dataset
+from src.data.OctDukeDataset import get_oct_dataset
 import torchvision.transforms as T
 
 def get_loaders(config: Config):
