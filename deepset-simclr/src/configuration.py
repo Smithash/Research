@@ -17,7 +17,7 @@ class Data:
     dataset_root: str = r"/content/drive/MyDrive/AMD"
     train_aug: str = 'simclr'
     val_aug: str = 'simclr'
-    image_size: int = 512
+    image_size: int = 224
 
     # For NLST only
     dataset_type: str = 'per_scan'  # ["per_scan", "deepset"]
