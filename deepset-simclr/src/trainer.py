@@ -25,7 +25,7 @@ class Trainer:
         if config.general.log_to_wandb:
             wandb.init(
                 project='SimCLR david', config=asdict(config),
-                name='Simclr DUKE',
+                name='Simclr min_scale = 0.67',
             )
 
     def train_one_epoch(self, train_loader, epoch):

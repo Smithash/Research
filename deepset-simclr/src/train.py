@@ -33,10 +33,10 @@ def train(config: Config):
         config.optim.lr, 0, config.optim.epochs, len(train_loader), config.optim.warmup_epochs
     )
 
-    # to_restore = restore_from_checkpoint(
-    #     config, model, optimiser
-    # )
-    # start_epoch = to_restore['epoch']
+    to_restore = restore_from_checkpoint(
+        config, model, optimiser
+    )
+    start_epoch = to_restore['epoch']
     start_epoch = 0
     trainer = Trainer(model, optimiser, lr_schedule, config)
 
