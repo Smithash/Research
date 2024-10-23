@@ -1,5 +1,5 @@
 general:
-  output_dir: /home-mscluster/lkerker/Research/deepset-simclr/results/resnet50-deepset-simclr
+  output_dir: /content/drive/MyDrive/Colab Notebooks/SimCLR
   log_to_wandb: True
   checkpoint_freq: 10
 data:
