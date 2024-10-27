@@ -77,6 +77,7 @@ class Trainer:
 
         return {
             'train/loss': train_loss,
+            'learning rate': self.optimiser.param_groups[0]['lr']
         }
 
     def validate_one_epoch(self, val_loader):
