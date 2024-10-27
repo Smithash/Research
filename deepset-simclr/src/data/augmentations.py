@@ -168,7 +168,7 @@ def get_transform(transform_name, config: Config):
         #     min_scale = 0.67,
         #     normalize={"mean": MEAN, "std": STD}
         # )
-        tfm = SimCLRTransformNoRandomResizedCrop(input_size=config.data.image_size)
+        tfm = SimCLRTransformNoRandomResizedCrop()
     elif transform_name == 'deepset':
         tfm = DeepSetTransform(config)
     else:
