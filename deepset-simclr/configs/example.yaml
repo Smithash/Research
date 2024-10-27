@@ -5,18 +5,18 @@ general:
 data:
   dataset: dummy
   dataset_type: per_scan
-  image_size: 224
+  image_size: 512
   set_size: 3
   sample_width: 0.5
 optim:
-  lr: 0.07
+  lr: 0.1
   weight_decay: 1.0e-10
   workers: 8
-  batch_size: 16
+  batch_size: 32
   epochs: 100
   device: cuda
 model:
   type: simclr
-  dedicated_deepset_mlp: False
+  dedicated_deepset_mlp: True
   backbone:
     name: resnet50

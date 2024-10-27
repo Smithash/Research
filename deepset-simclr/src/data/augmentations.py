@@ -165,7 +165,7 @@ def get_transform(transform_name, config: Config):
     if transform_name == 'simclr':
         tfm = SimCLRTransform(
             input_size=config.data.image_size,
-            min_scale = 0.5,
+            min_scale = 0.67,
             normalize={"mean": MEAN, "std": STD}
         )
     elif transform_name == 'deepset':
