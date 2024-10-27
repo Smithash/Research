@@ -163,11 +163,12 @@ def get_transform(transform_name, config: Config):
     logging.info('Initialising transform: %s', transform_name)
 
     if transform_name == 'simclr':
-        tfm = SimCLRTransform(
-            input_size=config.data.image_size,
-            min_scale = 0.67,
-            normalize={"mean": MEAN, "std": STD}
-        )
+        # tfm = SimCLRTransform(
+        #     input_size=config.data.image_size,
+        #     min_scale = 0.67,
+        #     normalize={"mean": MEAN, "std": STD}
+        # )
+        tfm = SimCLRTransformNoRandomResizedCrop(input_size=config.data.image_size)
     elif transform_name == 'deepset':
         tfm = DeepSetTransform(config)
     else:
