@@ -7,7 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 
-class SimCLROCTDataset(Dataset):
+class OCTDataset(Dataset):
     def __init__(self, data_dir, num_files=None, transform=None):
         self.data_dir = data_dir
         self.transform = transform
