@@ -24,8 +24,16 @@ class Trainer:
 
         if config.general.log_to_wandb:
             wandb.init(
-                project='SimCLR david', config=asdict(config),
-                name='Simclr min_scale = 0.67',
+                project='SimCLR david', 
+                config={
+                    "min crop scale": 0.5,
+                    "epochs": 100,
+                    "learning rate": 0.07,
+                    "image_size": 224,
+                    "crop": "with crop"
+                    },
+                name='SIMCLR v1',
+                
             )
 
     def train_one_epoch(self, train_loader, epoch):
