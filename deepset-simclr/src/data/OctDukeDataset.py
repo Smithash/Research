@@ -72,7 +72,7 @@ def get_oct_dataset(config, train_transform, val_transform):
     # train_indices = range(train_size)
     # val_indices = range(train_size, dataset_size)
     indices = list(range(dataset_size))
-    train_indices, val_indices = indices[:train_size], indicies[train_size:]
+    train_indices, val_indices = indices[:train_size], indices[train_size:]
     
     
     # Create Subset datasets with  different transforms
