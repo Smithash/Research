@@ -7,11 +7,12 @@ from torch.utils.data import Dataset, Subset
 from PIL import Image
 
 class OCTDataset(Dataset):
-    def __init__(self, data_dir, transform=None, split_type=None):
+    def __init__(self, data_dir, transform=None, is_training=False):
         self.data_dir = data_dir
         self.transform = transform
-        self.split_type = split_type
+        
         self.images = []
+        self.is_training = is_training
         self.files = [f for f in os.listdir(data_dir) if f.endswith('.mat')]
         self._process_all_files()
 
@@ -39,61 +40,48 @@ class OCTDataset(Dataset):
         return len(self.images)
 
     def __getitem__(self, idx):
-        image = self.images[idx]
+        image_path = os.path.join(self.data_dir, self.image_files[idx])
+        image = Image.open(image_path).convert('RGB')
+        
         if self.transform:
-            if self.split_type == 'train':
-                # For training, return two augmented views
+            if self.is_training:
                 aug_1 = self.transform(image)
                 aug_2 = self.transform(image)
                 return aug_1, aug_2
             else:
-                # For validation, return single transformed image
                 return self.transform(image)
         return image
 
 
-def get_oct_dataset(config, train_transform, val_transform):
+def get_oct_datasets(config, train_transform, val_transform):
     """
-    Initialize and return OCT datasets for training and validation.
+    Get train and validation datasets.
     
     Args:
-    config (object): Configuration object containing dataset parameters.
-    train_transform (callable): Transformations to apply to training data.
-    val_transform (callable): Transformations to apply to validation data.
+        config: Configuration object with data paths
+        train_transform: Transformations for training data
+        val_transform: Transformations for validation data
     
     Returns:
-    tuple: (train_dataset, val_dataset)
+        tuple: (train_dataset, val_dataset)
     """
+    train_dir = os.path.join(config.data.dataset_root, 'train')
+    val_dir = os.path.join(config.data.dataset_root, 'val')
     
-    full_dataset = OCTDataset(data_dir=config.data.dataset_root)
-    dataset_size = len(full_dataset)
-    val_size = int(0.2 * dataset_size)
-    train_size = dataset_size - val_size
-
-    # Create train dataset with train transform
     train_dataset = OCTDataset(
-        data_dir=config.data.dataset_root,
+        data_dir=train_dir,
         transform=train_transform,
-        split_type='train'
+        is_training=True
     )
-    train_indices = range(train_size)
-    train_dataset = Subset(train_dataset, train_indices)
-
-    # Create val dataset with val transform
+    
     val_dataset = OCTDataset(
-        data_dir=config.data.dataset_root,
+        data_dir=val_dir,
         transform=val_transform,
-        split_type='val'
+        is_training=False
     )
-    val_indices = range(train_size, dataset_size)
-    val_dataset = Subset(val_dataset, val_indices)
-
-    print(f"Initialized OCT dataset: Train={len(train_dataset)}, Val={len(val_dataset)}")
-    train_sample = train_dataset[0]
-    print(f"Training sample is tuple: {isinstance(train_sample, tuple)}")  # Should be True
-    print(f"Training sample has 2 augmentations: {len(train_sample) == 2}")  # Should be True
-
-    # Check validation sample
-    val_sample = val_dataset[0]
-    print(f"Validation sample is single tensor: {not isinstance(val_sample, tuple)}")  # Sho
+    
+    print(f"Datasets initialized:\n"
+          f"Train: {len(train_dataset)} images\n"
+          f"Val: {len(val_dataset)} images")
+    
     return train_dataset, val_dataset

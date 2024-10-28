@@ -14,7 +14,7 @@ class General:
 @dataclass
 class Data:
     dataset: str = 'oct'
-    dataset_root: str = r"/content/drive/MyDrive/AMD"
+    dataset_root: str = r"./Download/Research_Data"
     train_aug: str = 'simclr'
     val_aug: str = 'simclr'
     image_size: int = 224
@@ -66,3 +66,5 @@ def load_config(config_path: str) -> Config:
     with open(config_path) as file:
         data = yaml.safe_load(file)
     return from_dict(Config, data)
+
+#r"/content/drive/MyDrive/Research_Data"
