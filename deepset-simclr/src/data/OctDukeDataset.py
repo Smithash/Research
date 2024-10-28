@@ -53,7 +53,7 @@ class OCTDataset(Dataset):
         return image
 
 
-def get_oct_datasets(config, train_transform, val_transform):
+def get_oct_dataset(config, train_transform, val_transform):
     """
     Get train and validation datasets.
     
