@@ -7,7 +7,7 @@ from torch.utils.data import Dataset, Subset
 from PIL import Image
 
 class OCTDataset(Dataset):
-    def __init__(self, data_dir, transform=None):
+    def __init__(self, data_dir, transform=None, split_type=None):
         self.data_dir = data_dir
         self.transform = transform
         self.split_type = split_type
