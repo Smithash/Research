@@ -30,7 +30,8 @@ class Trainer:
                     "epochs": 100,
                     "learning rate": 0.07,
                     "image_size": 224,
-                    "crop": "with crop"
+                    "crop": "with crop",
+                    "batch_size": 32,
                     },
                 name='SIMCLR v1',
                 
