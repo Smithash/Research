@@ -60,7 +60,7 @@ def get_oct_dataset(config, train_transform, val_transform):
     tuple: (train_dataset, val_dataset)
     """
     
-    # Initialize the full dataset
+    # Initialize the full dataset with no transforms
     full_dataset = OCTDataset(data_dir=config.data.dataset_root)
     
     # Calculate the split
@@ -69,16 +69,17 @@ def get_oct_dataset(config, train_transform, val_transform):
     train_size = dataset_size - val_size
     
     # Create train/val splits
-    train_indices = range(train_size)
-    val_indices = range(train_size, dataset_size)
+    # train_indices = range(train_size)
+    # val_indices = range(train_size, dataset_size)
+    indices = list(range(dataset_size))
+    train_indices, val_indices = indices[:train_size], indicies[train_size:]
     
-    # Create Subset datasets
-    train_dataset = Subset(full_dataset, train_indices)
-    val_dataset = Subset(full_dataset, val_indices)
     
-    # Apply transforms
-    train_dataset.dataset.transform = train_transform
-    val_dataset.dataset.transform = val_transform
+    # Create Subset datasets with  different transforms
+    train_dataset = Subset(OCTDataset(config.data.dataset_root, transform= train_transform), train_indices)
+    val_dataset = Subset(OCTDataset(config.data.dataset_root, transform= val_transform), val_indices)
+    
+   
 
     print(f"Initialized OCT dataset: Train={len(train_dataset)}, Val={len(val_dataset)}")
 
