@@ -26,14 +26,14 @@ class Trainer:
             wandb.init(
                 project='SimCLR david', 
                 config={
-                    "min crop scale": 0.5,
+                    "min crop scale": 0.8,
                     "epochs": 100,
-                    "learning rate": 0.07,
+                    "learning rate": 0.1,
                     "image_size": 224,
                     "crop": "with crop",
-                    "batch_size": 32,
+                    "batch_size": 128,
                     },
-                name='SIMCLR v1',
+                name='SIMCLR v2',
                 
             )
 
