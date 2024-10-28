@@ -1,55 +1,68 @@
-import os
 import random
-from typing import List, Tuple
 import numpy as np
+import os
 import scipy.io
-from torch.utils.data import Dataset, Subset
-from PIL import Image
+import torch
+from torch.utils.data import Dataset, DataLoader
+import torchvision.transforms as transforms
+import matplotlib.pyplot as plt
 
-class OCTDataset(Dataset):
-    def __init__(self, data_dir, transform=None, is_training=False):
+class SimCLROCTDataset(Dataset):
+    def __init__(self, data_dir, num_files=None, transform=None):
         self.data_dir = data_dir
         self.transform = transform
-        
-        self.images = []
-        self.is_training = is_training
-        self.files = [f for f in os.listdir(data_dir) if f.endswith('.mat')]
+        self.valid_data = []
         self._process_all_files()
 
     def _process_all_files(self):
-        for file_name in self.files:
+        for file_name in os.listdir(self.data_dir):
             file_path = os.path.join(self.data_dir, file_name)
             mat = scipy.io.loadmat(file_path)
 
             images = mat['images']
+            layers = mat['layerMaps']
 
             x, y, nimages = images.shape
             step = 4
             ini = int(y / step)
             fin = int(ini * (step - 1))
+            thr = fin - ini - 1
 
             for i in range(nimages):
                 curr_im = images[:, ini:fin, i]
-                
-                # Convert numpy array to PIL Image
-                image = Image.fromarray(curr_im.astype(np.uint8)).convert('RGB')
-                
-                self.images.append(image)
+                num_layers = layers.shape[2]
+                if num_layers < 3:
+                    continue
+
+                curr_l1_0 = layers[i, ini:fin, 0]
+                curr_l1_1 = layers[i, ini:fin, 1]
+                curr_l1_2 = layers[i, ini:fin, 2]
+
+                cn0 = np.count_nonzero(~np.isnan(curr_l1_0))
+                cn1 = np.count_nonzero(~np.isnan(curr_l1_1))
+                cn2 = np.count_nonzero(~np.isnan(curr_l1_2))
+
+                flag = (cn0 > thr) and (cn1 > thr) and (cn2 > thr)
+
+                if flag:
+                    # Use original image without resizing
+                    image = curr_im.astype(np.float32)
+                    self.valid_data.append(image)
 
     def __len__(self):
-        return len(self.images)
+        return len(self.valid_data)
 
     def __getitem__(self, idx):
-        image = self.images[idx]
-        
+        image = self.valid_data[idx]
+
+        # Apply two different augmentations to the same image for SimCLR
         if self.transform:
-            if self.is_training:
-                aug_1 = self.transform(image)
-                aug_2 = self.transform(image)
-                return aug_1, aug_2
-            else:
-                return self.transform(image)
-        return image
+            view1 = self.transform(image)
+            view2 = self.transform(image)
+        else:
+            view1, view2 = image, image
+
+        return view1, view2
 
 
 def get_oct_dataset(config, train_transform, val_transform):
@@ -69,14 +82,12 @@ def get_oct_dataset(config, train_transform, val_transform):
     
     train_dataset = OCTDataset(
         data_dir=train_dir,
-        transform=train_transform,
-        is_training=True
+        transform=train_transform
     )
     
     val_dataset = OCTDataset(
         data_dir=val_dir,
         transform=val_transform,
-        is_training=False
     )
     
     print(f"Datasets initialized:\n"
