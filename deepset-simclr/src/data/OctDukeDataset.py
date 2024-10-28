@@ -69,17 +69,16 @@ def get_oct_dataset(config, train_transform, val_transform):
     train_size = dataset_size - val_size
     
     # Create train/val splits
-    # train_indices = range(train_size)
-    # val_indices = range(train_size, dataset_size)
-    indices = list(range(dataset_size))
-    train_indices, val_indices = indices[:train_size], indices[train_size:]
+    train_indices = range(train_size)
+    val_indices = range(train_size, dataset_size)
+    # indices = list(range(dataset_size))
+    # train_indices, val_indices = indices[:train_size], indices[train_size:]
     
     
     # Create Subset datasets with  different transforms
     train_dataset = Subset(OCTDataset(config.data.dataset_root, transform= train_transform), train_indices)
     val_dataset = Subset(OCTDataset(config.data.dataset_root, transform= val_transform), val_indices)
     
-   
 
     print(f"Initialized OCT dataset: Train={len(train_dataset)}, Val={len(val_dataset)}")
 
