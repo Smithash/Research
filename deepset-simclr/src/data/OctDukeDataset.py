@@ -40,7 +40,7 @@ class OCTDataset(Dataset):
         return len(self.images)
 
     def __getitem__(self, idx):
-        image_path = os.path.join(self.data_dir, self.image_files[idx])
+        image_path = os.path.join(self.data_dir, self.files[idx])
         image = Image.open(image_path).convert('RGB')
         
         if self.transform:
