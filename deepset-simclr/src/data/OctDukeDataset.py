@@ -1,97 +1,86 @@
-import random
-import numpy as np
 import os
+import random
+from typing import List, Tuple
+import numpy as np
 import scipy.io
-import torch
-from torch.utils.data import Dataset, DataLoader
-import torchvision.transforms as transforms
-import matplotlib.pyplot as plt
+from torch.utils.data import Dataset, Subset
+from PIL import Image
 
 class OCTDataset(Dataset):
-    def __init__(self, data_dir, num_files=None, transform=None):
+    def __init__(self, data_dir, transform=None):
         self.data_dir = data_dir
         self.transform = transform
-        self.valid_data = []
+        self.images = []
+        self.files = [f for f in os.listdir(data_dir) if f.endswith('.mat')]
         self._process_all_files()
 
     def _process_all_files(self):
-        for file_name in os.listdir(self.data_dir):
+        for file_name in self.files:
             file_path = os.path.join(self.data_dir, file_name)
             mat = scipy.io.loadmat(file_path)
 
             images = mat['images']
-            layers = mat['layerMaps']
 
             x, y, nimages = images.shape
             step = 4
             ini = int(y / step)
             fin = int(ini * (step - 1))
-            thr = fin - ini - 1
 
             for i in range(nimages):
                 curr_im = images[:, ini:fin, i]
-                num_layers = layers.shape[2]
-                if num_layers < 3:
-                    continue
-
-                curr_l1_0 = layers[i, ini:fin, 0]
-                curr_l1_1 = layers[i, ini:fin, 1]
-                curr_l1_2 = layers[i, ini:fin, 2]
-
-                cn0 = np.count_nonzero(~np.isnan(curr_l1_0))
-                cn1 = np.count_nonzero(~np.isnan(curr_l1_1))
-                cn2 = np.count_nonzero(~np.isnan(curr_l1_2))
-
-                flag = (cn0 > thr) and (cn1 > thr) and (cn2 > thr)
-
-                if flag:
-                    # Use original image without resizing
-                    image = curr_im.astype(np.float32)
-                    self.valid_data.append(image)
+                
+                # Convert numpy array to PIL Image
+                image = Image.fromarray(curr_im.astype(np.uint8)).convert('RGB')
+                
+                self.images.append(image)
 
     def __len__(self):
-        return len(self.valid_data)
+        return len(self.images)
 
     def __getitem__(self, idx):
-        image = self.valid_data[idx]
+        image = self.images[idx]
 
-        # Apply two different augmentations to the same image for SimCLR
         if self.transform:
-            view1 = self.transform(image)
-            view2 = self.transform(image)
+            aug_1 = self.transform(image)
+            aug_2 = self.transform(image)
+            return aug_1, aug_2
         else:
-            view1, view2 = image, image
-
-        return view1, view2
-
+            return image
 
 def get_oct_dataset(config, train_transform, val_transform):
     """
-    Get train and validation datasets.
+    Initialize and return OCT datasets for training and validation.
     
     Args:
-        config: Configuration object with data paths
-        train_transform: Transformations for training data
-        val_transform: Transformations for validation data
+    config (object): Configuration object containing dataset parameters.
+    train_transform (callable): Transformations to apply to training data.
+    val_transform (callable): Transformations to apply to validation data.
     
     Returns:
-        tuple: (train_dataset, val_dataset)
+    tuple: (train_dataset, val_dataset)
     """
-    train_dir = os.path.join(config.data.dataset_root, 'train_data')
-    val_dir = os.path.join(config.data.dataset_root, 'val_data')
     
-    train_dataset = OCTDataset(
-        data_dir=train_dir,
-        transform=train_transform
-    )
+    # Initialize the full dataset
+    full_dataset = OCTDataset(data_dir=config.data.dataset_root)
     
-    val_dataset = OCTDataset(
-        data_dir=val_dir,
-        transform=val_transform,
-    )
+    # Calculate the split
+    dataset_size = len(full_dataset)
+    val_size = int(0.2 * dataset_size)  # 20% for validation
+    train_size = dataset_size - val_size
     
-    print(f"Datasets initialized:\n"
-          f"Train: {len(train_dataset)} images\n"
-          f"Val: {len(val_dataset)} images")
+    # Create train/val splits
+    train_indices = range(train_size)
+    val_indices = range(train_size, dataset_size)
     
+    # Create Subset datasets
+    train_dataset = Subset(full_dataset, train_indices)
+    val_dataset = Subset(full_dataset, val_indices)
+    
+    # Apply transforms
+    train_dataset.dataset.transform = train_transform
+    val_dataset.dataset.transform = val_transform
+
+    print(f"Initialized OCT dataset: Train={len(train_dataset)}, Val={len(val_dataset)}")
+
     return train_dataset, val_dataset
+
