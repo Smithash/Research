@@ -47,9 +47,45 @@ class OCTDataset(Dataset):
         else:
             return image
 
+# def get_oct_dataset(config, train_transform, val_transform):
+#     """
+#     Initialize and return OCT datasets for training and validation.
+    
+#     Args:
+#     config (object): Configuration object containing dataset parameters.
+#     train_transform (callable): Transformations to apply to training data.
+#     val_transform (callable): Transformations to apply to validation data.
+    
+#     Returns:
+#     tuple: (train_dataset, val_dataset)
+#     """
+    
+#     # Initialize the full dataset
+#     full_dataset = OCTDataset(data_dir=config.data.dataset_root)
+    
+#     # Calculate the split
+#     dataset_size = len(full_dataset)
+#     val_size = int(0.2 * dataset_size)  # 20% for validation
+#     train_size = dataset_size - val_size
+    
+#     # Create train/val splits
+#     train_indices = range(train_size)
+#     val_indices = range(train_size, dataset_size)
+    
+#     # Create Subset datasets
+#     train_dataset = Subset(full_dataset, train_indices)
+#     val_dataset = Subset(full_dataset, val_indices)
+    
+#     # Apply transforms
+#     train_dataset.dataset.transform = train_transform
+#     val_dataset.dataset.transform = val_transform
+
+#     print(f"Initialized OCT dataset: Train={len(train_dataset)}, Val={len(val_dataset)}")
+
+#     return train_dataset, val_dataset
 def get_oct_dataset(config, train_transform, val_transform):
     """
-    Initialize and return OCT datasets for training and validation.
+    Initialize and return OCT datasets for training and validation from pre-split directories.
     
     Args:
     config (object): Configuration object containing dataset parameters.
@@ -60,26 +96,10 @@ def get_oct_dataset(config, train_transform, val_transform):
     tuple: (train_dataset, val_dataset)
     """
     
-    # Initialize the full dataset
-    full_dataset = OCTDataset(data_dir=config.data.dataset_root)
+    # Create separate datasets for training and validation directories
+    train_dataset = OCTDataset(data_dir=os.path.join(config.data.dataset_root, 'train_data'), transform=train_transform)
+    val_dataset = OCTDataset(data_dir=os.path.join(config.data.dataset_root, 'val_data'), transform=val_transform)
     
-    # Calculate the split
-    dataset_size = len(full_dataset)
-    val_size = int(0.2 * dataset_size)  # 20% for validation
-    train_size = dataset_size - val_size
-    
-    # Create train/val splits
-    train_indices = range(train_size)
-    val_indices = range(train_size, dataset_size)
-    
-    # Create Subset datasets
-    train_dataset = Subset(full_dataset, train_indices)
-    val_dataset = Subset(full_dataset, val_indices)
-    
-    # Apply transforms
-    train_dataset.dataset.transform = train_transform
-    val_dataset.dataset.transform = val_transform
-
     print(f"Initialized OCT dataset: Train={len(train_dataset)}, Val={len(val_dataset)}")
 
     return train_dataset, val_dataset
