@@ -14,7 +14,7 @@ class General:
 @dataclass
 class Data:
     dataset: str = 'oct'
-    dataset_root: str = r"./Download/Research_Data"
+    dataset_root: str = r"/content/drive/MyDrive/Research_Data"
     train_aug: str = 'simclr'
     val_aug: str = 'simclr'
     image_size: int = 224
