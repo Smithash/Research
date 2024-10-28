@@ -65,8 +65,8 @@ def get_oct_dataset(config, train_transform, val_transform):
     Returns:
         tuple: (train_dataset, val_dataset)
     """
-    train_dir = os.path.join(config.data.dataset_root, 'train')
-    val_dir = os.path.join(config.data.dataset_root, 'val')
+    train_dir = os.path.join(config.data.dataset_root, 'train_data')
+    val_dir = os.path.join(config.data.dataset_root, 'val_data')
     
     train_dataset = OCTDataset(
         data_dir=train_dir,
