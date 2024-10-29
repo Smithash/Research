@@ -33,7 +33,7 @@ class Trainer:
                     "crop": "with crop",
                     "batch_size": 16,
                     },
-                name='SIMCLR v2',
+                name='SIMCLR v3',
                 
             )
 
