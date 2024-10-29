@@ -68,8 +68,8 @@ class Trainer:
             # # print(f"Shape of view2 after stacking: {view2.shape}")
 
             # # Reshape if necessary
-            view1 = view1.view(-1, 3, 224, 224)
-            view2 = view2.view(-1, 3, 224, 224)
+            view1 = view1.view(-1, 3, 512, 512)
+            view2 = view2.view(-1, 3, 512, 512)
 
             # print(f"Final shape of view1: {view1.shape}")
             # print(f"Final shape of view2: {view2.shape}")
@@ -105,8 +105,8 @@ class Trainer:
 
 
                 # Reshape if necessary
-                view1 = view1.view(-1, 3, 224, 224)
-                view2 = view2.view(-1, 3, 224, 224)
+                view1 = view1.view(-1, 3, 512, 512)
+                view2 = view2.view(-1, 3, 512, 512)
                 
                 z1 = self.model(view1)
                 z2 = self.model(view2)
