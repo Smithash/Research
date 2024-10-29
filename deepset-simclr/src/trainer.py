@@ -29,9 +29,9 @@ class Trainer:
                     "min crop scale": 0.8,
                     "epochs": 100,
                     "learning rate": 0.1,
-                    "image_size": 224,
+                    "image_size": 512,
                     "crop": "with crop",
-                    "batch_size": 128,
+                    "batch_size": 16,
                     },
                 name='SIMCLR v2',
                 
