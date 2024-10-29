@@ -1,5 +1,5 @@
 general:
-  output_dir: /content/drive/MyDrive/Colab Notebooks/SimCLR/Crop
+  output_dir: /content/drive/MyDrive/Colab Notebooks/SimCLR/No-Crop
   log_to_wandb: True
   checkpoint_freq: 10
 data:
