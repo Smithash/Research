@@ -32,6 +32,7 @@ class Trainer:
                     "image_size": 512,
                     "crop": "with crop",
                     "batch_size": 16,
+                    "warm up": 5
                     },
                 name='SIMCLR v3',
                 

@@ -36,7 +36,7 @@ class Optimisation:
     workers: int = 4
     batch_size: int = 4
     epochs: int = 1
-    warmup_epochs: int = 1
+    warmup_epochs: int = 5
     optimiser: str = 'adam'
 
 
