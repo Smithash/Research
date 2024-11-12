@@ -2,7 +2,7 @@
 
 ## Acknowledgements
 
-This project builds on the **DeepSet SimCLR** framework for self-supervised learning of set-based representations, as described in the paper [DeepSet SimCLR: A Self-Supervised Framework for Set-based Representation Learning](https://arxiv.org/abs/2002.05709) by [Richard Klein, David Torpey]. The implementation was adapted from the code provided by [DeepSet SimCLR GitHub Repository](https://github.com/[link-to-repository]).
+This project builds on the **DeepSet SimCLR** framework for self-supervised learning of set-based representations, as described in the paper [DeepSet SimCLR: Self-supervised deep sets for improved pathology representation learning]([https://arxiv.org/abs/2002.05709](https://arxiv.org/abs/2402.15598)) by [Richard Klein, David Torpey]. The implementation was adapted from the code provided by [DeepSet SimCLR GitHub Repository](https://github.com/[link-to-repository]).
 
 ### Modifications
 
