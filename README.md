@@ -14,5 +14,5 @@ The original DeepSet SimCLR framework utilizes a DeepSet architecture to model s
 These modifications were made to adapt the framework for retinal OCT image analysis, ensuring it aligns with the specific structure and characteristics of medical imaging data.
 
 
-For details on the original DeepSet SimCLR pre-training process, refer to the official repository at [[https://github.com/[link-to-repository]](https://github.com/DavidTorpey/deepset-simclr/tree/main)].
+For details on the original DeepSet SimCLR pre-training process, refer to the official repository at [[https://github.com/DavidTorpey/deepset-simclr/tree/main]](https://github.com/DavidTorpey/deepset-simclr/tree/main)].
 
